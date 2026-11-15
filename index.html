@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moeen / مُعين – Judge mirror</title>
+<style>body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",sans-serif;color:#1b2a29;background:#fafcfb}main{max-width:760px;margin:0 auto;padding:28px 20px}h1{color:#0b5d57}a{color:#0b5d57}li{margin:.4em 0}.sim{background:#fff4dc;border:1px solid #e7c77a;border-radius:10px;padding:10px 14px}code{background:#eef3f2;padding:.05em .35em;border-radius:4px}</style>
+</head>
+<body>
+<main>
+<h1>Moeen / <span lang="ar" dir="rtl">مُعين</span>: judge mirror</h1>
+<p>A static mirror for the "Create AI Agents" judges. Moeen is a bounded AI agent loop: an AI solver drafts a fix and a test, deterministic checks verify it, and a pull request opens only after a named human approves the exact diff. Every step is recorded in a hash-chained ledger.</p>
+<ul>
+<li><a href="walkthrough.html"><strong>Judge walkthrough</strong></a>: how a run is triggered, the human approval gate, and where to read the ledger and logs</li>
+<li><strong>Live system:</strong> <a href="https://82.165.167.86/portal/moeen-live/">https://82.165.167.86/portal/moeen-live/</a></li>
+<li>Snapshot of 15 Nov 2026 10:32 CET: <a href="snapshot/ledger.json"><code>ledger.json</code></a> (6 records, chain verified) · <a href="snapshot/status.json"><code>status.json</code></a> · <a href="snapshot/sim.json"><code>sim.json</code></a> (simulation)</li>
+</ul>
+<p class="sim"><strong>Simulated parts:</strong> real runs target a sandbox repository we own, with synthetic code and seeded bugs (not a real humanitarian project). The run step uses a mock git host by design. <code>sim.json</code> comes from a scripted stub engine with no AI and no GitHub. No organisation is a partner.</p>
+<p><small>This mirror is a snapshot and is not updated automatically. For current data, use the live system link.</small></p>
+</main>
+</body>
+</html>

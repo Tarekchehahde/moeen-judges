@@ -1,0 +1,44 @@
+{
+ "schema": 1,
+ "title": "Moeen / مُعين – Live agent ledger",
+ "generated_at": "2026-11-15T09:32:25Z",
+ "heartbeat_ts": "2026-11-15T09:32:25Z",
+ "stale_after_min": 150,
+ "stale": false,
+ "banner": "Sandbox demo, synthetic issues, no real project touched",
+ "engine": "grokbot",
+ "last_run": {
+  "ts": "2026-10-31T10:24:29Z",
+  "task_id": "t-20261031-1123-95ad",
+  "outcome": "failed",
+  "reason": "preflight_tests_failed",
+  "engine": "grokbot",
+  "issue": 3,
+  "issue_title": "parse_day rejects dates written with slashes",
+  "wall_ms_to_proposal": null
+ },
+ "runs": {
+  "today": 0,
+  "day_cap": 3,
+  "week": 0,
+  "week_cap": 12,
+  "active": null,
+  "ledger_runs": 3
+ },
+ "kill_switch": {
+  "active": false,
+  "kill_file": false,
+  "enabled": true
+ },
+ "ledger": {
+  "records": 6,
+  "head_hash": "8d63267e45eb5862d438fbf1dfd072bbcee35ce484e58cc56e3e4acbe3391456",
+  "verify_ok": true,
+  "verify_message": "ok: 6 records, chain intact"
+ },
+ "kpi": {
+  "runs": 3,
+  "fixes_proposed": 2,
+  "median_ms_per_fix": 53923.5
+ }
+}

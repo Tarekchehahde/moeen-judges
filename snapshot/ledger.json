@@ -1,0 +1,111 @@
+{
+ "schema": 1,
+ "generated_at": "2026-11-15T09:32:25Z",
+ "head_hash": "8d63267e45eb5862d438fbf1dfd072bbcee35ce484e58cc56e3e4acbe3391456",
+ "entries": [
+  {
+   "task_id": "t-20261024-1756-a146",
+   "issue": 1,
+   "outcome": "awaiting_approval",
+   "reason": "",
+   "engine": "grokbot",
+   "diff_sha256": "18dea6d3bfe1fee0f6012689fd619f4dfe57196258361a5d0f8d9c5f92c3c531",
+   "wall_ms_to_proposal": 35005,
+   "confidence": null,
+   "repo": "Tarekchehahde/moeen-sandbox-shelter",
+   "issue_title": "beds_available counts reserved beds as free",
+   "quality": {
+    "verdict": "pass",
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "regress_failed_before": true,
+    "verify_passed_after": true
+   },
+   "seq": 1,
+   "ts": "2026-10-24T15:57:30Z",
+   "type": "run",
+   "hash": "868cc0cd571768befcb3a96c5b2999754a5a13eb530cdf7a0b24aa6f54767b19",
+   "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+   "task_id": "t-20261024-1756-a146",
+   "approver_login": "tarekchehade",
+   "decision": "approved",
+   "channel": "relayed via Manager Moeen",
+   "diff_sha256": "18dea6d3bfe1fee0f6012689fd619f4dfe57196258361a5d0f8d9c5f92c3c531",
+   "latency_ms": 1306815,
+   "pr_url": null,
+   "seq": 2,
+   "ts": "2026-10-24T16:19:17Z",
+   "type": "approval",
+   "hash": "fc373edfc042b60f3ad245778e287cce82fd929d81262729c94c034ed0281c7c",
+   "prev_hash": "868cc0cd571768befcb3a96c5b2999754a5a13eb530cdf7a0b24aa6f54767b19"
+  },
+  {
+   "task_id": "t-20261024-1859-a72d",
+   "issue": 1,
+   "outcome": "awaiting_approval",
+   "reason": "",
+   "engine": "grokbot",
+   "diff_sha256": "31b9e35a89614bc9ea9a25932fe09dfdf2feb57f4005183f9dd8e65699314d6f",
+   "wall_ms_to_proposal": 72842,
+   "confidence": null,
+   "repo": "Tarekchehahde/moeen-sandbox-shelter",
+   "issue_title": "beds_available counts reserved beds as free",
+   "quality": {
+    "verdict": "pass",
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "regress_failed_before": true,
+    "verify_passed_after": true
+   },
+   "seq": 3,
+   "ts": "2026-10-24T17:00:45Z",
+   "type": "run",
+   "hash": "b007f4bd5394373969431d70d3b92ce6269f96cefd4f666b50c0fa2400ff3b12",
+   "prev_hash": "fc373edfc042b60f3ad245778e287cce82fd929d81262729c94c034ed0281c7c"
+  },
+  {
+   "task_id": "t-20261024-1859-a72d",
+   "approver_login": "tarekchehade",
+   "decision": "approved",
+   "channel": "relayed via Manager Moeen",
+   "diff_sha256": "31b9e35a89614bc9ea9a25932fe09dfdf2feb57f4005183f9dd8e65699314d6f",
+   "latency_ms": 2507780,
+   "pr_url": null,
+   "seq": 4,
+   "ts": "2026-10-24T17:42:33Z",
+   "type": "approval",
+   "hash": "dd9d89786a7317f90b5ad92e7c38bfbbd5dfdff5480685dc8cf3e928798fc885",
+   "prev_hash": "b007f4bd5394373969431d70d3b92ce6269f96cefd4f666b50c0fa2400ff3b12"
+  },
+  {
+   "task_id": "t-20261024-1859-a72d",
+   "pr_url": "https://github.com/Tarekchehahde/moeen-sandbox-shelter/pull/1",
+   "pr_number": 1,
+   "branch": "moeen/t-20261024-1859-a72d",
+   "head_sha": "6ee0319390cd7b1a4bec0c575eb2f5c1b3828477",
+   "diff_sha256": "31b9e35a89614bc9ea9a25932fe09dfdf2feb57f4005183f9dd8e65699314d6f",
+   "seq": 5,
+   "ts": "2026-10-24T17:42:51Z",
+   "type": "pr",
+   "hash": "89e40c4a88abdf83b3e40aeb895782c6c39ffce8d7c9a97c910e3d79c9e4f02c",
+   "prev_hash": "dd9d89786a7317f90b5ad92e7c38bfbbd5dfdff5480685dc8cf3e928798fc885"
+  },
+  {
+   "task_id": "t-20261031-1123-95ad",
+   "issue": 3,
+   "outcome": "failed",
+   "reason": "preflight_tests_failed",
+   "engine": "grokbot",
+   "diff_sha256": "c9b008b3a45e9be43b52e04536cb9e1b8fdb9baa91a3fceb9e1ef824919084f1",
+   "repo": "Tarekchehahde/moeen-sandbox-shelter",
+   "issue_title": "parse_day rejects dates written with slashes",
+   "seq": 6,
+   "ts": "2026-10-31T10:24:29Z",
+   "type": "run",
+   "hash": "8d63267e45eb5862d438fbf1dfd072bbcee35ce484e58cc56e3e4acbe3391456",
+   "prev_hash": "89e40c4a88abdf83b3e40aeb895782c6c39ffce8d7c9a97c910e3d79c9e4f02c"
+  }
+ ]
+}

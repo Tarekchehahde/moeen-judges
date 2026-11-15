@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Moeen / مُعين – Judge walkthrough</title>
+<style>
+:root{--ink:#1b2a29;--muted:#5b6b69;--brand:#0b5d57;--sim:#8a5a00;--simbg:#fff4dc;--real:#0b5d57;--realbg:#e4f3f1;--line:#d6e0de}
+*{box-sizing:border-box}body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",sans-serif;color:var(--ink);background:#fafcfb}
+main{max-width:860px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:1.7rem;margin:.2em 0;color:var(--brand)}h2{font-size:1.25rem;margin:1.8em 0 .5em;border-bottom:2px solid var(--line);padding-bottom:.2em}
+.lead{color:var(--muted)}a{color:var(--brand)}code,kbd{font:0.92em ui-monospace,Menlo,Consolas,monospace;background:#eef3f2;padding:.05em .35em;border-radius:4px}
+pre{background:#eef3f2;padding:12px;border-radius:8px;overflow-x:auto;font-size:.88rem}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.04em;padding:.1em .55em;border-radius:99px;vertical-align:middle}
+.real{background:var(--realbg);color:var(--real);border:1px solid var(--real)}.sim{background:var(--simbg);color:var(--sim);border:1px solid var(--sim)}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0;background:#fff}.box.sim{background:var(--simbg);border-color:#e7c77a;color:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:#eef3f2}
+ol li{margin:.35em 0}.small{font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<div class="box"><strong>Static mirror</strong> of the judge walkthrough, published on GitHub Pages on 15 Nov 2026. Snapshot files in <code>snapshot/</code> were taken on 15 Nov 2026 10:32 CET. The live system is at <a href="https://82.165.167.86/portal/moeen-live/">https://82.165.167.86/portal/moeen-live/</a>. <a href="index.html">Mirror home</a></div>
+<p class="small">Prototype type B: Executable Workflow · prepared 15 Nov 2026</p>
+<h1>Moeen / <span lang="ar" dir="rtl">مُعين</span>: judge walkthrough</h1>
+<p class="lead">Moeen is a bounded AI agent loop. It picks up an eligible open-source issue, has an AI solver draft a fix and a test, checks the result with deterministic code, and opens a pull request <strong>only after a named human approves the exact diff</strong>. Every step goes into a public, hash-chained ledger.</p>
+
+<div class="box sim"><strong>What is simulated, in plain words</strong>
+<ul>
+<li><span class="tag sim">SANDBOX</span> All real runs target <code>Tarekchehahde/moeen-sandbox-shelter</code>, a private repository <strong>we own</strong> with synthetic shelter-management code and <strong>deliberately seeded bugs</strong>. It is <strong>not</strong> a real humanitarian project, and no real project is touched.</li>
+<li><span class="tag sim">MOCK HOST</span> The run step uses an in-memory mock git host by design (a run never pushes). Only the approved <code>open-pr</code> step talks to GitHub.</li>
+<li><span class="tag sim">SIMULATION</span> The "Simulation" section and <code>sim.json</code> come from a <strong>StubEngine</strong> (scripted fixes) plus the mock host. No AI and no GitHub are involved. They show the failure paths (caps, kill switch, planted secrets, reject).</li>
+<li><span class="tag sim">MOCK DATA</span> The older concept demo at <code>/portal/moeen-demo/</code> uses mock data throughout.</li>
+<li>No organisation shown anywhere is a partner of Moeen.</li>
+</ul></div>
+
+<h2>1. Open the live page</h2>
+<p><a href="https://82.165.167.86/portal/moeen-live/">https://82.165.167.86/portal/moeen-live/</a>. No login, no install. You'll see:</p>
+<ul>
+<li><span class="tag real">REAL</span> the latest run, the run counters (today x/3, week x/12), the kill-switch state and the heartbeat time. A red <strong>STALE</strong> banner appears if the agent box has sent no heartbeat for over 150 minutes. The box pauses between agent turns, so this can happen at night, and the page says so honestly instead of faking "live".</li>
+<li><span class="tag real">REAL</span> the ledger table of past runs, approvals and PRs.</li>
+<li><span class="tag sim">SIMULATION</span> a separately labelled section with the negative-path scenarios.</li>
+</ul>
+
+<h2>2. How a run is triggered</h2>
+<table>
+<tr><th>Judge can do (in the browser)</th><th>Operator does (on the agent box, CLI)</th></tr>
+<tr><td>Open the live page, read <code>status.json</code>, <code>ledger.json</code> and <code>sim.json</code>, and follow the PR link. Judges <strong>can't</strong> start a run from the page: the page is static by design, with no backend and no buttons that spend AI budget. To see a live run, ask the team for a scheduled demo slot.</td>
+<td>
+<pre># in the agent code repository (operator only)
+python3 -m moeen status                 # counters, kill switch
+python3 -m moeen --state-dir &lt;state&gt; run --issue 3    # one real run
+python3 -m moeen kill on                # KILL switch: blocks every launch
+python3 -m moeen kill off</pre>
+Quotas enforced in code: <strong>3 real runs a day, 12 per ISO week, one at a time</strong>, at most 2 open PRs, and no same-day retry after a timeout.</td></tr>
+</table>
+<p>What happens next, in order: fetch the issue → eligibility rules (opt-in label, <code>moeen:no</code> veto, excluded topics) → caps → hand-off to the AI solver (<em>Solver Moeen</em>, deadline 20 min) → <strong>check #1</strong> (scope, size, secrets, personal data) → tests (the regression test must fail before the fix and pass after; scored by code, not by the AI) → <strong>preflight</strong> (the patch must apply and pass on a fresh copy of the sandbox) → <strong>check #2</strong> (everything shown or proposed) → <em>awaiting approval</em>.</p>
+
+<h2>3. The human approval gate</h2>
+<div class="box">
+<p>Only <strong>Tarek Chehade</strong> (GitHub <code>Tarekchehahde</code>) can approve, by typing exactly:</p>
+<pre>/approve &lt;task_id&gt; &lt;sha8&gt;      e.g. /approve t-20261024-1859-a72d 31b9e35a
+/reject  &lt;task_id&gt; &lt;reason&gt;</pre>
+<ul>
+<li><code>sha8</code> is the first 8 hex digits of the diff's SHA-256. If the diff changes afterwards, the approval no longer matches and nothing happens.</li>
+<li>Wrong author, wrong hash or a malformed line → ignored and logged. There is no auto-approve path in the code, and a test proves that <code>open_pr()</code> refuses without a valid approval.</li>
+<li>Today Tarek types the line in the team chat and it's relayed to the operator. The ledger records the channel. Approving through a GitHub comment is <em>planned, not built</em>.</li>
+<li>Only after approval does the code re-run the preflight, push a branch and open <strong>one</strong> pull request, in the sandbox repo only, with an AI-use disclosure.</li>
+</ul></div>
+
+<h2>4. Where to read the ledger and logs</h2>
+<table>
+<tr><th>File</th><th>What it shows</th></tr>
+<tr><td><code>status.json</code>: <a href="https://82.165.167.86/portal/moeen-live/status.json">live</a> · <a href="snapshot/status.json">snapshot</a></td><td>Heartbeat, stale flag, last run and reason, run counters vs caps, kill switch, ledger record count and verification result.</td></tr>
+<tr><td><code>ledger.json</code>: <a href="https://82.165.167.86/portal/moeen-live/ledger.json">live</a> · <a href="snapshot/ledger.json">snapshot</a></td><td>Public ledger entries. Each has <code>prev_hash</code> and <code>hash</code> (SHA-256 of the record), so any edit breaks the chain.</td></tr>
+<tr><td><code>sim.json</code>: <a href="https://82.165.167.86/portal/moeen-live/sim.json">live</a> · <a href="snapshot/sim.json">snapshot</a> <span class="tag sim">SIMULATION</span></td><td>11 scenario rows: expected vs actual, each pass/fail, plus its own 22-record simulation ledger.</td></tr>
+<tr><td>Run logs (on request)</td><td>the full <code>ledger.jsonl</code>, <code>kpi.jsonl</code>, the per-task folders (<code>task.json</code>, <code>patch.diff</code>, <code>done.json</code>) and the offline-test logs. They're included in the submission pack.</td></tr>
+</table>
+<p>Verify the chain yourself (operator box): <code>python3 -m moeen --state-dir &lt;state&gt; ledger verify</code> → <code>ok: 6 records, chain intact</code> (15 Nov 2026).</p>
+
+<h2>5. Real results so far</h2>
+<table>
+<tr><th>Date (Berlin)</th><th>Task</th><th>Outcome</th></tr>
+<tr><td>24 Oct 2026 17:57</td><td>t-20261024-1756-a146 · issue #1</td><td>Proposal passed all checks and was approved, but no PR: the patch re-created an existing test file. Fixed by adding the preflight step.</td></tr>
+<tr><td>24 Oct 2026 19:00</td><td>t-20261024-1859-a72d · issue #1</td><td>Passed, approved after 41.8 min, <strong>PR #1 opened</strong> in the sandbox repo.</td></tr>
+<tr><td>31 Oct 2026 11:24</td><td>t-20261031-1123-95ad · issue #3</td><td><strong>Stopped by the gate</strong> (<code>preflight_tests_failed</code>): the solver's test file still contained other, unfixed bugs' tests. No PR. Fixed the same morning (commit 0ab8408).</td></tr>
+</table>
+<p class="small">228 automated tests pass (15 Nov 2026). Cost per task in money isn't metered yet; run counts and durations are.</p>
+</main>
+</body>
+</html>
